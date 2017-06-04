@@ -4,3 +4,5 @@ POST   /                     v1.post.PostController.create
 
 GET    /:id                 v1.post.PostController.show(id)
 POST    /:id                v1.post.PostController.update(id)
+POST    /rem/:id                v1.post.PostController.remove(id)
+

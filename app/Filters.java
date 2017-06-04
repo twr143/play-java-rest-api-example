@@ -1,3 +1,4 @@
+import play.filters.cors.CORSFilter;
 import play.filters.csrf.CSRFFilter;
 import play.filters.headers.SecurityHeadersFilter;
 import play.filters.hosts.AllowedHostsFilter;
@@ -18,9 +19,9 @@ import javax.inject.Singleton;
 public class Filters extends DefaultHttpFilters {
 
     @Inject
-    public Filters(CSRFFilter csrfFilter,
+    public Filters(CORSFilter corsFilter, CSRFFilter csrfFilter,
                    AllowedHostsFilter allowedHostsFilter,
                    SecurityHeadersFilter securityHeadersFilter) {
-        super(csrfFilter, allowedHostsFilter, securityHeadersFilter);
+        super(corsFilter,csrfFilter, allowedHostsFilter, securityHeadersFilter);
     }
 }

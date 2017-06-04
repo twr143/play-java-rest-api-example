@@ -1,0 +1,21 @@
+posts:
+- PostData(data1):
+    id:      1
+    title:   t1
+    body:    b1
+- PostData(data2):
+    id:     2
+    title:  t2
+    body:   b2
+- PostData(data3):
+    id:     3
+    title:  t3
+    body:   b3
+- PostData(data4):
+    id:     4
+    title:  t4
+    body:   b4
+- PostData(data5):
+    id:     5
+    title:  t5
+    body:   b5

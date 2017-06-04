@@ -21,8 +21,15 @@ public class PostController extends Controller {
         this.ec = ec;
         this.handler = handler;
     }
+  public CompletionStage<Result> remove(String id)
+  {
+    return handler.delete(id).thenApplyAsync(result -> {
 
-    public CompletionStage<Result> list() {
+      return result==0?ok(Json.toJson("removed:"+id)):notFound(Json.toJson("no such object:"+id));}
+    , ec.current());
+  }
+
+  public CompletionStage<Result> list() {
         return handler.find().thenApplyAsync(posts -> {
             final List<PostResource> postList = posts.collect(Collectors.toList());
             return ok(Json.toJson(postList));
@@ -33,8 +40,7 @@ public class PostController extends Controller {
         return handler.lookup(id).thenApplyAsync(optionalResource -> {
             return optionalResource.map(resource ->
                 ok(Json.toJson(resource))
-            ).orElseGet(() ->
-                notFound()
+            ).orElseGet(Results::notFound
             );
         }, ec.current());
     }
