@@ -4,6 +4,7 @@ import play.Environment;
 import play.api.Play;
 import play.db.jpa.JPAApi;
 import play.libs.Yaml;
+import v1.author.Author;
 import v1.post.PostData;
 
 import javax.persistence.EntityManager;
@@ -26,7 +27,7 @@ public class InitialDataProvider implements InitialData {
   public InitialDataProvider(JPAApi jpaApi, Environment environment) {
     this.environment=environment;
     this.jpaApi = jpaApi;
-              int i=0;
+              int i=2;
              if (this.environment.isDev()) {
                wrap(em -> {
                  Long count = countPostData(em);
@@ -42,6 +43,11 @@ public class InitialDataProvider implements InitialData {
                      @SuppressWarnings("unchecked")
                      LinkedHashMap<String, String> entry = (LinkedHashMap<String, String>) ((Map.Entry) (((LinkedHashMap) p).entrySet().iterator().next())).getValue();
                      em.merge(new PostData(entry.get("title"), entry.get("body")));
+                   });
+                   List<Object> authors = all.get("authors");
+                   authors.forEach(p -> {
+                     Map.Entry<String, String> entry = (Map.Entry) (((LinkedHashMap) p).entrySet().iterator().next());
+                     em.merge(new Author(entry.getValue()));
                    });
                  }
                  return null;

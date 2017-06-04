@@ -4,6 +4,9 @@ import com.codahale.metrics.Slf4jReporter;
 import com.google.inject.AbstractModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import v1.author.Author;
+import v1.author.AuthorRepo;
+import v1.author.JPAAuthorRepo;
 import v1.post.PostRepository;
 import v1.post.JPAPostRepository;
 
@@ -26,6 +29,7 @@ public class Module extends AbstractModule {
     public void configure() {
         bind(MetricRegistry.class).toProvider(MetricRegistryProvider.class).asEagerSingleton();
         bind(PostRepository.class).to(JPAPostRepository.class).asEagerSingleton();
+        bind(AuthorRepo.class).to(JPAAuthorRepo.class).asEagerSingleton();
         bind(InitialData.class).to(InitialDataProvider.class).asEagerSingleton();
     }
 }

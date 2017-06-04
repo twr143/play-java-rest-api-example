@@ -6,7 +6,7 @@ import java.util.stream.Stream;
 
 public interface PostRepository {
 
-    CompletionStage<Stream<PostData>> list();
+    CompletionStage<Stream<PostData>> listPosts();
 
     CompletionStage<PostData> create(PostData postData);
 

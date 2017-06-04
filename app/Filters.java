@@ -9,7 +9,7 @@ import javax.inject.Singleton;
 
 /**
  * This class configures filters that run on every request. This
- * class is queried by Play to get a list of filters.
+ * class is queried by Play to get a listAuthors of filters.
  *
  * https://www.playframework.com/documentation/latest/ScalaCsrf
  * https://www.playframework.com/documentation/latest/AllowedHostsFilter

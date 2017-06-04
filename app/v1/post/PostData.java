@@ -1,5 +1,7 @@
 package v1.post;
 
+import v1.author.Author;
+
 import javax.persistence.*;
 
 /**
@@ -22,4 +24,8 @@ public class PostData {
     public Long id;
     public String title;
     public String body;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="author_id")
+    private Author author;
+
 }

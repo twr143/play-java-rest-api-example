@@ -1,6 +1,5 @@
 package v1.post;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.palominolabs.http.url.UrlBuilder;
 import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Http;
@@ -26,7 +25,7 @@ public class PostResourceHandler {
     }
 
     public CompletionStage<Stream<PostResource>> find() {
-        return repository.list().thenApplyAsync(postDataStream -> {
+        return repository.listPosts().thenApplyAsync(postDataStream -> {
             return postDataStream.map(data -> new PostResource(data, link(data)));
         }, ec.current());
     }

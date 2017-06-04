@@ -14,3 +14,7 @@ posts:
 - PostData(data5):
     title:  t5
     body:   b5
+
+authors:
+  - name: ilya
+  - name: lev

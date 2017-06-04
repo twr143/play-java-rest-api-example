@@ -33,7 +33,7 @@ public class JPAPostRepository implements PostRepository {
     }
 
     @Override
-    public CompletionStage<Stream<PostData>> list() {
+    public CompletionStage<Stream<PostData>> listPosts() {
         return supplyAsync(() -> wrap(em -> select(em)), ec);
     }
 
