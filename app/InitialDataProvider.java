@@ -1,4 +1,6 @@
 import com.google.inject.Inject;
+import play.Application;
+import play.Environment;
 import play.api.Play;
 import play.db.jpa.JPAApi;
 import play.libs.Yaml;
@@ -19,32 +21,32 @@ import java.util.function.Function;
  */
 public class InitialDataProvider implements InitialData {
   private final JPAApi jpaApi;
-
+  private final play.Environment environment;
   @Inject
-  public InitialDataProvider(JPAApi jpaApi) {
+  public InitialDataProvider(JPAApi jpaApi, Environment environment) {
+    this.environment=environment;
     this.jpaApi = jpaApi;
               int i=0;
+             if (this.environment.isDev()) {
+               wrap(em -> {
+                 Long count = countPostData(em);
+                 if (count == 0) {
+                   InputStream is = this.getClass().getClassLoader().getResourceAsStream("initial-data.yml");
 
-             wrap(em->{
-               Long count = countPostData(em);
-               if (count==0){
-                 InputStream is = this.getClass().getClassLoader().getResourceAsStream("initial-data.yml");
-
-                 @SuppressWarnings("unchecked")
-                 Map<String, List<Object>> all =
-                     (Map<String, List<Object>>) Yaml.load(is, this.getClass().getClassLoader());
-
-                 //Yaml.load("initial-data.yml"); //calls Play.application() which isn't available yet
-                 List<Object> posts= all.get("posts");
-                 posts.forEach(p->{
                    @SuppressWarnings("unchecked")
-                  LinkedHashMap<String,String> entry =  (LinkedHashMap<String,String>)((Map.Entry)(((LinkedHashMap)p).entrySet().iterator().next())).getValue();
-                   em.merge(new PostData(entry.get("title"),entry.get("body")));
-                 });
-               }
-               return null;
-             });
+                   Map<String, List<Object>> all =
+                           (Map<String, List<Object>>) Yaml.load(is, this.getClass().getClassLoader());
 
+                   List<Object> posts = all.get("posts");
+                   posts.forEach(p -> {
+                     @SuppressWarnings("unchecked")
+                     LinkedHashMap<String, String> entry = (LinkedHashMap<String, String>) ((Map.Entry) (((LinkedHashMap) p).entrySet().iterator().next())).getValue();
+                     em.merge(new PostData(entry.get("title"), entry.get("body")));
+                   });
+                 }
+                 return null;
+               });
+             }
      }
   private <T> T wrap(Function<EntityManager, T> function) {
       return jpaApi.withTransaction(function);
