@@ -27,5 +27,18 @@ public class PostData {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="author_id")
     private Author author;
-
+    public Author getAuthor() {
+      return author;
+    }
+  public void setAuthor(Author author) {
+    this.author = author;
+  }
+  @Override
+  public String toString() {
+    return "PostData{" +
+            "id=" + id +
+            ", title='" + title + '\'' +
+            ", body='" + body + '\'' +
+            '}';
+  }
 }

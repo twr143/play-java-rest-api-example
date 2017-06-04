@@ -4,6 +4,7 @@ import v1.post.PostData;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by ilya on 04.06.2017.
@@ -16,7 +17,7 @@ public class Author {
   private Long id;
 
   @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL, mappedBy = "author")
-  List<PostData> posts;
+  Set<PostData> posts;
   private String name;
   public Author(String name) {
     this();
@@ -25,13 +26,23 @@ public class Author {
   public Author() {
   }
 
-  public void addPost(PostData post){
-    posts.add(post);
-  }
   public String getName() {
     return name;
   }
   public Long getId() {
     return id;
+  }
+  public String getPostsStr() {
+    String result="";
+    for (PostData p:posts)
+      result+=p.toString()+" ";
+    return result;
+  }
+  @Override
+  public String toString() {
+    return "Author{" +
+            "id=" + id +
+            ", name='" + name + '\'' +
+            '}';
   }
 }

@@ -1,1 +1,2 @@
 GET    /                     v1.author.AuthorController.list
+POST    /:id/:postId         v1.author.AuthorController.addPost(id,postId)

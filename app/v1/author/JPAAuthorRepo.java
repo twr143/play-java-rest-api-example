@@ -42,6 +42,21 @@ public class JPAAuthorRepo implements AuthorRepo {
   public CompletionStage<Optional<Author>> get(Long id) {
     return null;
   }
+  @Override
+  public CompletionStage<Integer> addPost(Long authorId, Long postId) {
+    return supplyAsync(() -> {
+          return wrap(em->{
+            Author a = em.find(Author.class, authorId);
+            if (a==null)
+              return 1;
+            PostData pd = em.find(PostData.class, postId);
+            if (pd==null)
+              return 2;
+            pd.setAuthor(a);
+             em.merge(pd);
+             return 0;
+          });
+        }, ec);  }
 
   private Stream<Author> select(EntityManager em) {
     TypedQuery<Author> query = em.createQuery("SELECT a FROM Author a", Author.class);
