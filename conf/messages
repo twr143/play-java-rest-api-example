@@ -1,0 +1,4 @@
+author.addpost.result.0=added to author:{0} post:{1}
+author.addpost.result.1=no author:{0}
+author.addpost.result.2=no post exists with id:{1}
+author.addpost.result.3=author {0} already has the post {1}

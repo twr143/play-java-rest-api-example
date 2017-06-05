@@ -1,5 +1,7 @@
 package v1.author;
 
+import play.i18n.Lang;
+import play.i18n.Messages;
 import play.libs.Json;
 import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;
@@ -26,16 +28,9 @@ public class AuthorController extends Controller {
   }
   public CompletionStage<Result> addPost(String id, String postId) {
     return repository.addPost(Long.parseLong(id),Long.parseLong(postId)).thenApplyAsync(result -> {
-         String reason;
-         if (result==1)
-           reason="no author: "+ id;
-         else if (result==2)
-           reason="no post: "+ postId;
-         else if (result==3)
-           reason="author already has the post: "+ postId;
-         else
-           reason="added to author:"+id+" post:"+postId;
-        return ok(Json.toJson(reason));
+      int i=0;
+      return ok(Json.toJson(Messages.get("author.addpost.result."+result,id,postId)));
+
     }, ec.current());
   }
   public CompletionStage<Result> list() {
