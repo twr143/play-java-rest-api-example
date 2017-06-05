@@ -21,6 +21,11 @@ public class PostController extends Controller {
         this.ec = ec;
         this.handler = handler;
     }
+
+  public Result index(List<PostResource> postList) {
+      return ok(views.html.index.render(postList));
+  }
+
   public CompletionStage<Result> remove(String id)
   {
     return handler.delete(id).thenApplyAsync(result -> {
@@ -35,6 +40,14 @@ public class PostController extends Controller {
             return ok(Json.toJson(postList));
         }, ec.current());
     }
+
+  public CompletionStage<Result> listOnIndex() {
+        return handler.find().thenApplyAsync(posts -> {
+            final List<PostResource> postList = posts.collect(Collectors.toList());
+            return index(postList);
+        }, ec.current());
+    }
+
 
     public CompletionStage<Result> show(String id) {
         return handler.lookup(id).thenApplyAsync(optionalResource -> {

@@ -5,6 +5,7 @@ import v1.post.PostData;
 import javax.persistence.*;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Created by ilya on 04.06.2017.
@@ -33,10 +34,7 @@ public class Author {
     return id;
   }
   public String getPostsStr() {
-    String result="";
-    for (PostData p:posts)
-      result+=p.toString()+" ";
-    return result;
+    return posts.stream().map(PostData::toString).collect(Collectors.joining(" "));
   }
   @Override
   public String toString() {

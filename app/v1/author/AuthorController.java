@@ -28,7 +28,6 @@ public class AuthorController extends Controller {
   }
   public CompletionStage<Result> addPost(String id, String postId) {
     return repository.addPost(Long.parseLong(id),Long.parseLong(postId)).thenApplyAsync(result -> {
-      int i=0;
       return ok(Json.toJson(Messages.get("author.addpost.result."+result,id,postId)));
 
     }, ec.current());

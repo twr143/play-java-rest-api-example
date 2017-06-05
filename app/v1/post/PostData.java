@@ -35,10 +35,10 @@ public class PostData {
   }
   @Override
   public String toString() {
-    return "PostData{" +
+    return "PostD[" +
             "id=" + id +
             ", title='" + title + '\'' +
             ", body='" + body + '\'' +
-            '}';
+            ']';
   }
 }
