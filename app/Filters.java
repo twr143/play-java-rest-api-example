@@ -19,9 +19,9 @@ import javax.inject.Singleton;
 public class Filters extends DefaultHttpFilters {
 
     @Inject
-    public Filters(CORSFilter corsFilter, CSRFFilter csrfFilter,
+    public Filters(/*CORSFilter corsFilter, CSRFFilter csrfFilter,
                    AllowedHostsFilter allowedHostsFilter,
-                   SecurityHeadersFilter securityHeadersFilter) {
-        super(corsFilter,csrfFilter, allowedHostsFilter, securityHeadersFilter);
+                   SecurityHeadersFilter securityHeadersFilter*/) {
+        super(/*corsFilter,csrfFilter, allowedHostsFilter, securityHeadersFilter*/);
     }
 }

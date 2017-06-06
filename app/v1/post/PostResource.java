@@ -50,4 +50,13 @@ public class PostResource {
     public String getAuthor() {
       return author;
     }
+    public void setTitle(String title) {
+        this.title = title;
+    }
+    public void setBody(String body) {
+        this.body = body;
+    }
+    public void setId(String id) {
+      this.id = id;
+    }
 }

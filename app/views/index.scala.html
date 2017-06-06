@@ -1,12 +1,30 @@
 @import v1.post.PostResource
-@(posts: java.util.List[PostResource])
+@(posts: java.util.List[PostResource], showPosts: Boolean)
 <!doctype html>
 
 @main("Welcome to Play") {
+@if(showPosts){
+            <ul>
+            @for(p <- posts) {
+            <form method="POST" action="@routes.PostController.removePost()">
+              <li>@p.getTitle: @p.getBody</li>
+                <input type="hidden" name="id" value="@p.getId"/>
+                <input type="submit" value="Remove">
+            </form>
+            }
+        </ul>
+        <br>
+        <form method="POST" action="@routes.PostController.addPost()">
+            <label for="title">T:
+            <input type="text" name="title"/>
+            </label>
+            <label for="body">B:
+            <input type="text" name="body"/>
+            </label>
+            <input type="submit" value="Add Post"/>
+        </form>
+} else{
+    <h1>front page intentionally left empty, use /posts to operate with posts or web-service client</h1>
+}
 
-                        <ul>
-                        @for(p <- posts) {
-                          <li>@p.getTitle: @p.getBody</li>
-                        }
-                    </ul>
 }

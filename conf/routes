@@ -3,4 +3,6 @@ GET     /                           controllers.HomeController.index
 ->     /v1/posts                    posts.Routes
 ->     /v1/auth                     authors.Routes
 
-GET    /posts                     v1.post.PostController.listOnIndex
+GET    /posts                     controllers.PostController.listOnIndex
+POST    /posts                     controllers.PostController.addPost()
+POST    /posts/rem                  controllers.PostController.removePost()

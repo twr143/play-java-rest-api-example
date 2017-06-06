@@ -65,7 +65,7 @@ public class PostResourceHandler {
             throw new IllegalStateException(e);
         }
     }
-    CompletionStage<Integer> delete(String id)
+    public CompletionStage<Integer> delete(String id)
     {
         return repository.remove(Long.parseLong(id));
     }

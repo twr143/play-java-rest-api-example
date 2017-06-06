@@ -1,6 +1,8 @@
 package v1.post;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import play.data.Form;
+import play.data.FormFactory;
 import play.libs.Json;
 import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.*;
@@ -13,8 +15,8 @@ import java.util.stream.Collectors;
 @With(PostAction.class)
 public class PostController extends Controller {
 
-    private HttpExecutionContext ec;
-    private PostResourceHandler handler;
+    protected HttpExecutionContext ec;
+    protected PostResourceHandler handler;
 
     @Inject
     public PostController(HttpExecutionContext ec, PostResourceHandler handler) {
@@ -23,7 +25,7 @@ public class PostController extends Controller {
     }
 
   public Result index(List<PostResource> postList) {
-      return ok(views.html.index.render(postList));
+      return ok(views.html.index.render(postList,true));
   }
 
   public CompletionStage<Result> remove(String id)
@@ -38,13 +40,6 @@ public class PostController extends Controller {
         return handler.find().thenApplyAsync(posts -> {
             final List<PostResource> postList = posts.collect(Collectors.toList());
             return ok(Json.toJson(postList));
-        }, ec.current());
-    }
-
-  public CompletionStage<Result> listOnIndex() {
-        return handler.find().thenApplyAsync(posts -> {
-            final List<PostResource> postList = posts.collect(Collectors.toList());
-            return index(postList);
         }, ec.current());
     }
 
