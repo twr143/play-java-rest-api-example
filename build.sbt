@@ -19,6 +19,7 @@ libraryDependencies += "org.hibernate" % "hibernate-entitymanager" % "5.1.0.Fina
 libraryDependencies += "io.dropwizard.metrics" % "metrics-core" % "3.2.1"
 libraryDependencies += "com.palominolabs.http" % "url-builder" % "1.1.0"
 libraryDependencies += "net.jodah" % "failsafe" % "1.0.3"
+libraryDependencies += "org.abstractj.kalium" % "kalium" % "0.4.0"
 
 libraryDependencies += "io.gatling.highcharts" % "gatling-charts-highcharts" % "2.2.2" % Test
 libraryDependencies += "io.gatling" % "gatling-test-framework" % "2.2.2" % Test

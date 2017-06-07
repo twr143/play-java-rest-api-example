@@ -1,20 +1,24 @@
 @import v1.post.PostResource
+@import _root_.views.html.authtoken.authenticityToken
 @(posts: java.util.List[PostResource], showPosts: Boolean)
 <!doctype html>
 
 @main("Welcome to Play") {
 @if(showPosts){
-            <ul>
+        <ul>
             @for(p <- posts) {
-            <form method="POST" action="@routes.PostController.removePost()">
-              <li>@p.getTitle: @p.getBody</li>
-                <input type="hidden" name="id" value="@p.getId"/>
-                <input type="submit" value="Remove">
-            </form>
+              <li>@p.getTitle: @p.getBody
+              <form method="POST" action="@routes.PostController.removePost()">
+                  @authenticityToken()
+                  <input type="hidden" name="id" value="@p.getId"/>
+                  <input type="submit" value="Remove">
+              </form>
+              </li>
             }
         </ul>
         <br>
         <form method="POST" action="@routes.PostController.addPost()">
+            @authenticityToken()
             <label for="title">T:
             <input type="text" name="title"/>
             </label>

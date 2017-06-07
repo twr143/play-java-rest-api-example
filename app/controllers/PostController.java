@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.concurrent.CompletionStage;
 import java.util.stream.Collectors;
 
+import static java.util.concurrent.CompletableFuture.supplyAsync;
+
 /**
  * Created by ilya on 05.06.2017.
  */
@@ -28,8 +30,12 @@ public class PostController extends v1.post.PostController{
   }
   public CompletionStage<Result> addPost() {
 
-    PostResource post = this.formFactory.form(PostResource.class).bindFromRequest().get();
-    return handler.create(post).thenApplyAsync(a->redirect("/posts"),ec.current());
+    Form<PostResource> form = this.formFactory.form(PostResource.class).bindFromRequest();
+    if (!form.hasErrors()){
+      PostResource post = form.get();
+      return handler.create(post).thenApplyAsync(a->redirect("/posts"),ec.current());
+    }
+    return supplyAsync(()->redirect("/posts"),ec.current());
   }
   public CompletionStage<Result> listOnIndex() {
         return handler.find().thenApplyAsync(posts -> {

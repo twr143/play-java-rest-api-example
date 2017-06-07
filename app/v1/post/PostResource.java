@@ -1,5 +1,6 @@
 package v1.post;
 
+import authtoken.validator.AuthenticityToken;
 import v1.author.Author;
 
 /**
@@ -11,6 +12,8 @@ public class PostResource {
     private String title;
     private String body;
     private String author;
+    @AuthenticityToken
+  	private String authtoken;
 
     public PostResource() {
     }
@@ -58,5 +61,11 @@ public class PostResource {
     }
     public void setId(String id) {
       this.id = id;
+    }
+    public String getAuthtoken() {
+      return authtoken;
+    }
+    public void setAuthtoken(String authtoken) {
+      this.authtoken = authtoken;
     }
 }

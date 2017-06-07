@@ -6,3 +6,5 @@ GET     /                           controllers.HomeController.index
 GET    /posts                     controllers.PostController.listOnIndex
 POST    /posts                     controllers.PostController.addPost()
 POST    /posts/rem                  controllers.PostController.removePost()
+
+GET     /assets/*file               controllers.Assets.at(path="/public", file)
