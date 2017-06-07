@@ -6,19 +6,21 @@ import play.api.libs.Crypto;
 import play.mvc.Http.Context;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Random;
 
 public class AuthenticityTokenGenerator {
 
+   static final HashMap<String,String> tokenSeedCache = new HashMap<>();
 	/**
 	 * Generates a UUID and stores its signature in the session, used by the authenticity token
 	 * @return
 	 */
 	public static String generate() {
     String atoken = Context.current().session().get(AuthTokenConstants.AUTH_TOKEN);
-    String aseed = Context.current().session().get(AuthTokenConstants.AUTH_SEED);
+    String aseed;
 
-    if (aseed!=null&&atoken!=null)
+    if (atoken!=null&&(aseed = tokenSeedCache.get(atoken))!=null)
       return aseed;
 
 		byte[] b = new byte[32];
@@ -27,7 +29,10 @@ public class AuthenticityTokenGenerator {
 		AuthenticationKey aKey = new AuthenticationKey(b);
 		String sign=aKey.toString();
 		Context.current().session().put(AuthTokenConstants.AUTH_TOKEN, sign);
-    Context.current().session().put(AuthTokenConstants.AUTH_SEED, Arrays.toString(b));
-		return Arrays.toString(b);
+    tokenSeedCache.put(sign,aseed=Arrays.toString(b));
+		return aseed;
 	}
+	public static void removeSeedFromCache(String token){
+	   tokenSeedCache.remove(token);
+  }
 }

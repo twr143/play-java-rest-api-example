@@ -2,6 +2,7 @@ package authtoken.validator;
 
 import javax.validation.ConstraintValidator;
 
+import authtoken.AuthenticityTokenGenerator;
 import org.abstractj.kalium.encoders.Encoder;
 import org.abstractj.kalium.keys.AuthenticationKey;
 import play.api.libs.Crypto;
@@ -38,6 +39,7 @@ public class AuthenticityTokenValidator extends Validator<Object> implements
 		Session session = play.mvc.Http.Context.current().session();
 		String atoken = session.get(AuthTokenConstants.AUTH_TOKEN);
 		session.remove(AuthTokenConstants.AUTH_TOKEN);
+    AuthenticityTokenGenerator.removeSeedFromCache(atoken);
 		
 		if (atoken == null || uuid == null)
 			return false;
