@@ -14,6 +14,7 @@ scalaVersion := "2.11.11"
 
 libraryDependencies += filters
 libraryDependencies += javaJpa
+libraryDependencies += cache
 
 libraryDependencies += "org.hibernate" % "hibernate-entitymanager" % "5.1.0.Final"
 libraryDependencies += "io.dropwizard.metrics" % "metrics-core" % "3.2.1"

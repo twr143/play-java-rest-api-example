@@ -1,6 +1,8 @@
 package v1.post;
 
 import net.jodah.failsafe.*;
+import play.cache.CacheApi;
+import play.cache.NamedCache;
 import play.db.jpa.JPAApi;
 
 import javax.inject.Inject;
@@ -8,6 +10,7 @@ import javax.inject.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
@@ -25,11 +28,14 @@ public class JPAPostRepository implements PostRepository {
     private final JPAApi jpaApi;
     private final PostExecutionContext ec;
       private final CircuitBreaker circuitBreaker = new CircuitBreaker().withFailureThreshold(10).withSuccessThreshold(3);
+    protected CacheApi repoCache;
+    private static final String postsList="postsList";
 
     @Inject
-    public JPAPostRepository(JPAApi api, PostExecutionContext ec) {
+    public JPAPostRepository(JPAApi api, PostExecutionContext ec, @NamedCache("post-repo-cache")CacheApi repoCache) {
         this.jpaApi = api;
         this.ec = ec;
+        this.repoCache = repoCache;
     }
 
     @Override
@@ -53,7 +59,13 @@ public class JPAPostRepository implements PostRepository {
     }
     @Override
     public CompletionStage<Integer> remove(long id) {
-        return supplyAsync(() -> wrap(em -> Failsafe.with(circuitBreaker).get(() -> remove(em, id))), ec);
+        return supplyAsync(() -> wrap(em -> Failsafe.with(circuitBreaker).get(() -> {
+          int result = remove(em, id);
+          if (result==0)//success
+              repoCache.remove(postsList);
+          return result;
+
+        })), ec);
     }
 
     private <T> T wrap(Function<EntityManager, T> function) {
@@ -66,8 +78,13 @@ public class JPAPostRepository implements PostRepository {
     }
 
     private Stream<PostData> select(EntityManager em) {
+        List<PostData> cachedPosts =  repoCache.get(postsList);
+        if (cachedPosts!=null)
+            return cachedPosts.stream();
         TypedQuery<PostData> query = em.createQuery("SELECT p FROM PostData p", PostData.class);
-        return query.getResultList().stream();
+        cachedPosts=query.getResultList();
+        repoCache.set(postsList,cachedPosts);
+        return cachedPosts.stream();
     }
 
     private Optional<PostData> modify(EntityManager em, Long id, PostData postData) throws InterruptedException {
@@ -81,7 +98,9 @@ public class JPAPostRepository implements PostRepository {
     }
 
     private PostData insert(EntityManager em, PostData postData) {
-        return em.merge(postData);
+        PostData resultPost = em.merge(postData);
+        repoCache.remove(postsList);
+        return resultPost;
     }
 
     private int remove(EntityManager em, long id){

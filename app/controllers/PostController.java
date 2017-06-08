@@ -1,5 +1,9 @@
 package controllers;
 
+import authtoken.AuthenticityTokenGenerator;
+import play.cache.CacheApi;
+import play.cache.Cached;
+import play.cache.NamedCache;
 import play.data.Form;
 import play.data.FormFactory;
 import play.libs.concurrent.HttpExecutionContext;
@@ -23,10 +27,16 @@ public class PostController extends v1.post.PostController{
 
   protected FormFactory formFactory;
 
+
   @Inject
-  public PostController(HttpExecutionContext ec, PostResourceHandler handler, FormFactory formFactory) {
+  public PostController(HttpExecutionContext ec, PostResourceHandler handler,
+                        FormFactory formFactory,
+                        @NamedCache("auth-token-cache") CacheApi tokenSeedCache
+
+                        ) {
     super(ec, handler);
     this.formFactory=formFactory;
+    AuthenticityTokenGenerator.setTokenSeedCache(tokenSeedCache);
   }
   public CompletionStage<Result> addPost() {
 
@@ -37,6 +47,7 @@ public class PostController extends v1.post.PostController{
     }
     return supplyAsync(()->redirect("/posts"),ec.current());
   }
+
   public CompletionStage<Result> listOnIndex() {
         return handler.find().thenApplyAsync(posts -> {
             final List<PostResource> postList = posts.collect(Collectors.toList());
