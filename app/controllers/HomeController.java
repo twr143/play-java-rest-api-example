@@ -1,6 +1,8 @@
 package controllers;
 
-import play.mvc.*;
+import play.mvc.Controller;
+import play.mvc.Result;
+import play.mvc.Results;
 
 import java.util.ArrayList;
 
@@ -10,7 +12,13 @@ import java.util.ArrayList;
  */
 public class HomeController extends Controller {
 
-    public Result index() {
+
+  // gracefull shutdown
+  public Result exit() {
+//    System.exit(0);
+    return Results.ok();
+  }
+  public Result index() {
         return ok(views.html.index.render(new ArrayList<>(),false));
     }
 
